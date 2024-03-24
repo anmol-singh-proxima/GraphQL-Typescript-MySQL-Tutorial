@@ -1,0 +1,10 @@
+# Initialize the project
+$ npm init -y
+
+# Install the dependencies and devDependencies
+$ npm install --save apollo-server graphql graphql-tag @types/pg pg dotenv @types/uuid uuid
+$ npm install --save-dev ts-node @types/node ts-node-dev
+
+# Initialize the typescript in the project
+$ npm install -g typescript
+$ tsc --init
