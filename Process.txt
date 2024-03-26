@@ -1,3 +1,6 @@
+## Intitial Setup of the project with Graphql Schema and Resolvers
+------------------------------------------------------------------
+
 # Initialize the project
 $ npm init -y
 
@@ -8,3 +11,29 @@ $ npm install --save-dev ts-node @types/node ts-node-dev
 # Initialize the typescript in the project
 $ npm install -g typescript
 $ tsc --init
+
+
+===========================================================
+
+## Introduction of the Sequelize in the project
+-----------------------------------------------
+
+# Install required libraries 
+$ npm install --save sequelize pg-hstore
+$ npm install --save-dev sequelize-cli
+$ npx sequelize-cli init
+
+# Create the Models using sequelize-cli
+$ npx sequelize-cli model:generate --name User --attributes name:string
+$ npx sequelize-cli model:generate --name Project --attributes title:string
+$ npx sequelize-cli model:generate --name ProjectAssigments --attributes ProjectId:integer
+
+# Convert all the models from javascript to typescript files
+# Add all the required attributes in all these models
+# Run the db.sequelize.sync() in src/index.ts file to create all 3 tables in the database
+
+# Create individual files for the models in seeders/ and creat array of objects (filled with the required data) in these files
+# Import these files in src/utils.ts file and then create individual functions to call db.[Model].create() for adding the individual object data in each row for the corresponding table 
+# Finally, call these functions in src/index.ts file and then execute them one by one, it will add the data in each of the tables in the database
+
+# Create function getUsers() to get all the usrs in the database in src/utils.ts file and import it in src/graphql/resolvers.js file 

@@ -1,7 +1,7 @@
-import { getAllUsersQuery } from '../utils';
+import { getUsers } from '../utils';
 
 export const resolvers = {
     Query: {
-        users: async () => getAllUsersQuery()
+        users: async () => getUsers()
     },
 };

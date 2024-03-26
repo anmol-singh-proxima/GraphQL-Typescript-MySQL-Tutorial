@@ -1,6 +1,82 @@
+/*
+=========================================================================
+======== QUERIES TO FETCH THE DATA FROM DATABASE USING SEQUELIZE ========
+=========================================================================
+*/
+
+import db from '../models';
+import { users } from '../seeders/users';
+import { projects } from '../seeders/projects';
+import { assignments } from '../seeders/assignments';
+
+// Function to add the Data rows in the Users table in the Database
+export const createUsers = () => {
+    users.map(user => {
+        db.User.create(user);
+    })
+}
+
+// Function to add the Data rows in the Projects table in the Database
+export const createProjects = () => {
+    projects.map(project => {
+        db.Project.create(project);
+    })
+}
+
+// Function to add the Data rows in the ProjectsAssignments table in the Database
+export const createAssignments = () => {
+    assignments.map(assignment => {
+        db.ProjectAssigments.create(assignment);
+    })
+}
+
+// Interface to create a type for Projects
+interface project {
+    id: number;
+    title: string;
+    release: string;
+    status: string;
+}
+
+// Interface to create a type for Users
+interface user {
+    id: string;
+    name: string;
+    email: string;
+    Projects: project [];
+}
+
+// Function to fetch all the data related to Users for the Graphql Query
+export const getUsers = async (): Promise<user[]> => {
+    const userData = await db.User.findAll({
+        include: {
+            model: db.Project,
+            through: {
+                attributes: []
+            }
+        }
+    });
+    const users = await userData.map((user: user) => {
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            projects: user.Projects,
+        }
+    })
+    return users;
+}
+
+
+
+/*
+===========================================================================
+======== QUERIES TO FETCH THE DATA FROM DATABASE WITHOUT USING ORM ========
+===========================================================================
+*/
+
 import { pool } from '../database/db';
 import { v4 as uuidv4 } from 'uuid';
-
 
 
 /**********************************************************************************
@@ -21,7 +97,6 @@ interface Project {
     release: string
     status: string
 }
-
 
 
 /****************************************************************
@@ -59,7 +134,6 @@ export const findUserByEmail = async (email: string): Promise<User[]> => {
         password: 'passwordz'
     }]
 }
-
 
 
 /******************************************************************
@@ -126,7 +200,6 @@ export const addAssignment = async (user_email: string, project_id: number, user
 }
 
 
-
 /*********************************************
  * Functions to fetch data from the Database *
  ********************************************/
@@ -178,7 +251,6 @@ export const getAllUsersQuery = async () => {
 }
 
 
-
 /**********************************************
  * Functions to Create Tables in the Database *
  *********************************************/
@@ -226,7 +298,6 @@ export const createAssignmentTable = async () => {
 
     return await readQuery(query) ? "Table created" : "Unable to create table.";
 }
-
 
 
 /**************************************************
